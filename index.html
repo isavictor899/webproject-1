@@ -732,6 +732,17 @@
             });
         });
     </script>
+
+    <!-- Vercel Speed Insights -->
+    <!-- Note: When deployed to Vercel with Speed Insights enabled in the dashboard, -->
+    <!-- Vercel automatically injects the script at /_vercel/speed-insights/script.js -->
+    <!-- The following is a manual implementation using the CDN for compatibility -->
+    <script type="module">
+        import { injectSpeedInsights } from 'https://cdn.jsdelivr.net/npm/@vercel/speed-insights@1/dist/index.mjs';
+        
+        // Initialize Speed Insights
+        injectSpeedInsights();
+    </script>
 </body>
 
 </html>
