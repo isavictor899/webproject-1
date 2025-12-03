@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+sitemap:
+https://www.houseofessentialcommodities.co.ke/sitemap.xml
