@@ -3,605 +3,738 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Natugrow Biosciences | Sustainable Farming Solutions</title>
+    <title>House of Essential Commodities</title>
+    <link rel="icon" href="https://www.houseofessentialcommodities.co.ke/img/favicon/favicon.png" sizes="any">
+    <link rel="icon" type="image/png" 
+          href="/img/favicon/favicon-32x32.png" 
+          sizes="32x32">
     
-    <!-- Google Fonts: Montserrat (Matching the clean aesthetic) -->
+    <link rel="icon" type="image/png" 
+          href="/img/favicon/favicon-16x16.png" 
+          sizes="16x16">
+    
+    <link rel="apple-touch-icon" sizes="180x180" 
+          href="/img/favicon/apple-touch-icon.png">
+    
+    <link rel="icon" type="image/x-icon" 
+          href="/img/favicon/favicon.ico">
+    <meta name="description" content="Experience convenient access to essential goods for your home and business in Kenya.">
+    
+    <!-- Google Fonts: Matching the Strikingly Template Style -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Font Awesome for Icons -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Preload hero image (highest-quality visible image) -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
+                        sans: ['Open Sans', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#4CAF50', // Nature Green
-                        secondary: '#2E7D32', // Darker Green
-                        dark: '#1a1a1a',
-                        light: '#f9f9f9'
+                        primary: '#2C3E50',  /* Deep Blue/Gray */
+                        accent: '#27ae60',   /* Fresh Green for "Commodities" */
+                        offwhite: '#f9f9f9',
+                        darkoverlay: 'rgba(0, 0, 0, 0.6)',
                     }
                 }
             }
         }
     </script>
-    
+
     <style>
-        /* Custom Styles for that 'Strikingly' feel */
+        /* Custom Styles for Template Accuracy */
         .hero-bg {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* Low-quality placeholder while the high-res image loads (LQIP) */
+            background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=20&q=10');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
-        }
-        
-        .btn-hover {
-            transition: all 0.3s ease;
-        }
-        .btn-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* Disabled fixed attachment for better performance on mobile */
+            /* background-attachment: fixed; */
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Mobile Menu Animation */
+        /* The actual hero image will be an absolutely-positioned <img> for responsive loading */
+        .hero-bg img.hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            z-index: 0;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #27ae60;
+            margin: 10px auto 0;
+        }
+
+        /* Hover effects for product cards */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; 
+            z-index: 1; 
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            z-index: 20; 
+        }
+        
+        /* Pop-Out Content Box (Default: Right Side) */
+        .product-hover-tooltip {
+            position: absolute;
+            top: 50%; 
+            left: 100%; /* Default anchor: right edge of the card */
+            transform: translate(15px, -50%); /* Initial offset right */
+            width: 280px;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; 
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 999; 
+            border-left: 4px solid #27ae60; 
+        }
+        
+        .product-card:hover .product-hover-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(25px, -50%); /* Animated shift further right */
+            pointer-events: auto; 
+        }
+
+        /* Tooltip Positioning Override for Left Side (for cards in the rightmost column) */
+        @media (min-width: 1024px) { /* Applies only to desktop/large screens */
+            .tooltip-left .product-hover-tooltip {
+                /* Override default right-side positioning */
+                left: auto;
+                right: 100%; /* Anchor to the left edge of the parent card */
+                transform: translate(-15px, -50%); /* Initial offset left */
+                
+                /* Border Management: Swap borders */
+                border-left: none;
+                border-right: 4px solid #27ae60;
+            }
+
+            .tooltip-left:hover .product-hover-tooltip {
+                /* Override hover shift */
+                transform: translate(-25px, -50%); /* Animated shift further left */
+            }
+        }
+        
+        /* Responsive adjustment for small screens (ALWAYS appears below the card) */
+        @media (max-width: 1023px) {
+            .product-hover-tooltip {
+                left: 0;
+                right: auto; /* Reset right property */
+                top: 100%;
+                transform: translate(0, 15px);
+                width: 100%;
+                /* Reset border for mobile view where direction doesn't matter as much */
+                border-left: 4px solid #27ae60; 
+                border-right: none;
+            }
+            .product-card:hover .product-hover-tooltip {
+                transform: translate(0, 25px); 
+            }
+        }
+
+
+        /* Nav transparency transition */
+        #navbar {
+            transition: background-color 0.3s ease, padding 0.3s ease;
+        }
+        #navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        #navbar.scrolled .nav-link {
+            color: #2C3E50;
+        }
+        #navbar.scrolled .logo-text {
+            color: #2C3E50;
+        }
+        
+        /* Mobile Menu */
         #mobile-menu {
             transition: max-height 0.3s ease-in-out;
             max-height: 0;
             overflow: hidden;
         }
-        #mobile-menu.active {
+        #mobile-menu.open {
             max-height: 400px;
-        }
-
-        /* Pop-out specific styles for smooth transition (Why Us section) */
-        .popover-content {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px) translateX(-50%);
-            transition: all 0.3s ease-in-out;
-            pointer-events: none; /* Prevents flickering if cursor moves between button and popover */
-        }
-        
-        /* Show popover on HOVER (desktop) and on CLICK (mobile/touch) */
-        .group:hover .popover-content,
-        .popover-open .popover-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) translateX(-50%);
-            pointer-events: auto;
         }
     </style>
 </head>
-<body class="font-sans text-gray-800 antialiased">
+<body class="font-sans text-gray-700 antialiased">
 
     <!-- Navigation -->
-    <nav class="bg-white shadow-md fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="#" class="text-xl font-bold text-gray-900 tracking-wide uppercase">
-                        <span class="text-primary">Natugrow</span>biosciences<span class="text-xs normal-case block text-gray-500 font-normal">.co.ke</span>
-                    </a>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#home" class="text-gray-600 hover:text-primary font-medium transition">Home</a>
-                    <a href="#products" class="text-gray-600 hover:text-primary font-medium transition">Products</a>
-                    <a href="#services" class="text-gray-600 hover:text-primary font-medium transition">Services</a>
-                    <a href="#about" class="text-gray-600 hover:text-primary font-medium transition">About Us</a>
-                    <a href="#contact" class="px-5 py-2 bg-primary text-white rounded-full hover:bg-secondary transition shadow-sm">Contact Us</a>
-                </div>
+    <nav id="navbar" class="fixed w-full z-50 top-0 text-white py-6 px-6 lg:px-12 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#" class="logo-text font-heading font-bold text-xl lg:text-2xl tracking-wide uppercase">
+            House of Essential Commodities
+        </a>
 
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-primary focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex space-x-8 text-sm font-semibold tracking-wide uppercase">
+            <a href="#intro" class="nav-link hover:text-accent transition">Home</a>
+            <a href="#welcome" class="nav-link hover:text-accent transition">Welcome</a>
+            <a href="#about" class="nav-link hover:text-accent transition">About Us</a>
+            <a href="#products" class="nav-link hover:text-accent transition">Products</a>
+            
+            <a href="#testimonials" class="nav-link hover:text-accent transition">Testimonials</a>
+            <a href="#contact" class="nav-link hover:text-accent transition">Contact</a>
         </div>
 
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="md:hidden bg-white border-t">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-                <a href="#home" class="block px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md">Home</a>
-                <a href="#products" class="block px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md">Products</a>
-                <a href="#services" class="block px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md">Services</a>
-                <a href="#about" class="block px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md">About Us</a>
-                <a href="#contact" class="block px-3 py-2 text-primary font-bold hover:bg-gray-50 rounded-md">Contact Us</a>
-            </div>
-        </div>
+        <!-- Mobile Menu Button -->
+        <button id="menu-btn" class="lg:hidden text-2xl focus:outline-none">
+            <i class="fas fa-bars nav-link"></i>
+        </button>
     </nav>
 
-    <!-- Hero Section -->
-    <header id="home" class="hero-bg h-screen flex items-center justify-center pt-20">
-        <div class="max-w-4xl mx-auto px-4 text-center text-white">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
-                Discover Sustainable Solutions for Your Farming Needs
-            </h1>
-            <p class="text-lg md:text-xl mb-10 text-gray-100 font-light drop-shadow-md">
-                Join us in promoting eco-friendly agricultural practices for farmers of all sizes.
-            </p>
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu" class="lg:hidden fixed top-[70px] w-full bg-white shadow-lg z-40">
+        <div class="flex flex-col p-4 space-y-4 text-center font-heading text-primary font-semibold">
+            <a href="#intro" class="mobile-link hover:text-accent">Home</a>
+            <a href="#welcome" class="mobile-link hover:text-accent">Welcome</a>
+            <a href="#about" class="mobile-link hover:text-accent">About Us</a>
+            <a href="#products" class="mobile-link hover:text-accent">Products</a>
             
-            <!-- Hero Form with CAPTCHA -->
-            <div class="bg-white bg-opacity-95 p-6 rounded-lg shadow-2xl max-w-2xl mx-auto text-gray-800">
-                <!-- 
-                    ACTION UPDATED: The Formspree URL has been set to the user's unique ID (xanrdake). 
-                    When the CAPTCHA passes, the form will submit directly to this endpoint.
-                -->
-                <form id="inquiry-form" onsubmit="handleInquirySubmit(event)" method="POST" action="https://formspree.io/f/xanrdake" class="flex flex-col gap-4">
-                    <!-- Top Row: Name, Email, CAPTCHA -->
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <!-- Added 'name' attribute for form submission -->
-                        <input type="text" id="inquiry-name" name="name" placeholder="Name" class="w-full md:w-1/3 px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-primary bg-gray-50" required>
-                        <!-- Added 'name' attribute for form submission -->
-                        <input type="email" id="inquiry-email" name="email" placeholder="Email" class="w-full md:w-1/3 px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-primary bg-gray-50" required>
-                        
-                        <!-- CAPTCHA Field -->
-                        <div class="w-full md:w-1/3 flex items-center bg-gray-50 rounded border border-gray-300 px-4 py-3">
-                            <label for="captcha-input" id="captcha-question" class="font-medium text-sm text-gray-600 mr-2 whitespace-nowrap">What is 5 + 3?</label>
-                            <input type="number" id="captcha-input" placeholder="Answer" class="flex-grow bg-transparent focus:outline-none text-gray-800" required aria-label="Captcha Answer">
-                        </div>
-                    </div>
-                    
-                    <!-- Inquiry Message Field (Added 'name' attribute) -->
-                    <textarea id="inquiry-message" name="message" rows="4" placeholder="Your inquiry or message here..." class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-primary bg-gray-50" required></textarea>
+            <a href="#testimonials" class="mobile-link hover:text-accent">Testimonials</a>
+            <a href="#contact" class="mobile-link hover:text-accent">Contact</a>
+        </div>
+    </div>
 
-                    <!-- Bottom Row: Button and Error -->
-                    <p id="captcha-error" class="text-red-500 font-medium text-sm hidden"></p>
+    <!-- Hero Section -->
+    <section id="intro" class="hero-bg relative h-screen min-h-[600px] flex items-center justify-center">
+        <picture class="absolute inset-0 block w-full h-full" aria-hidden="true">
+            <source type="image/webp" srcset="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&fm=webp&w=480&q=60 480w, https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&fm=webp&w=768&q=70 768w, https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&fm=webp&w=1200&q=80 1200w, https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&fm=webp&w=1920&q=80 1920w" sizes="100vw">
+            <img class="hero-img" src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" srcset="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=480&q=60 480w, https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=768&q=70 768w, https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80 1200w, https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80 1920w" sizes="100vw" alt="" loading="eager" decoding="async">
+        </picture>
 
-                    <div class="flex justify-center md:justify-start">
-                        <button type="submit" id="submit-button" class="w-full md:w-1/3 px-6 py-3 bg-primary text-white font-bold rounded hover:bg-secondary transition btn-hover uppercase tracking-wider text-sm">
-                            Inquire Now
-                        </button>
+        <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+
+        <div class="container mx-auto px-6 relative z-20 flex flex-col lg:flex-row items-center justify-between pt-20">
+            <!-- Hero Text -->
+            <div class="lg:w-1/2 text-white text-center lg:text-left mb-10 lg:mb-0">
+             
+                <p class="text-lg lg:text-xl font-light opacity-90 mb-8 max-w-lg mx-auto lg:mx-0">
+                    Experience convenient access to essential goods for your home and business. Join us for exclusive offers and quality products tailored for your needs.
+                </p>
+                <a href="#products" class="inline-block bg-accent hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition shadow-lg uppercase text-sm tracking-wider">
+                    Explore Products
+                </a>
+            </div>
+
+            <!-- Hero Form -->
+            <div class="lg:w-1/3 bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
+                <h3 class="font-heading text-2xl font-bold text-gray-800 mb-6 text-center">Get in Touch</h3>
+                <!-- Updated Form to trigger Email Client -->
+                <form onsubmit="handleFormSubmit(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-600 text-sm font-bold mb-2">Name</label>
+                        <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-accent" placeholder="Your Name" required>
                     </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-600 text-sm font-bold mb-2">Email</label>
+                        <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-accent" placeholder="Your Email" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-600 text-sm font-bold mb-2">Comment</label>
+                        <textarea name="comment" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-accent" rows="3" placeholder="How can we help?" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-gray-800 text-white font-bold py-3 px-4 rounded transition">
+                        SEND MESSAGE
+                    </button>
                 </form>
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- Services / Features Section -->
-    <section id="services" class="py-20 bg-light">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Welcome / Features Section -->
+    <section id="welcome" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl font-bold text-primary section-title">Why Choose Us</h2>
+                <p class="text-gray-500 mt-4 max-w-2xl mx-auto">We are dedicated to empowering neighborhood markets across Kenya.</p>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <!-- Feature 1 -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 group">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1593463897552-69da7e8343eb?auto=format&fit=crop&w=800&q=80" alt="Innovative Products" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Innovative Products</h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            We focus on developing agrochemicals that integrate the latest scientific advancements to promote sustainable agriculture.
-                        </p>
-                    </div>
+              <div class="bg-white p-6 rounded-lg shadow-xl transition duration-300 hover:shadow-2xl">
+                    <i class="fas fa-truck-fast text-5xl text-primary mb-4"></i>
+                    <h3 class="text-2xl font-heading font-semibold mb-3">Swift Delivery</h3>
+                    <p class="text-gray-600">Guaranteed timely delivery across major metropolitan areas in Kenya, straight to your doorstep.</p>
                 </div>
-
                 <!-- Feature 2 -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 group">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1656232489912-228843837464?auto=format&fit=crop&w=800&q=80" alt="Affordable Solutions" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Affordable Solutions</h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            Our products are priced competitively to ensure that both large-scale and small farmers can access quality agrochemical solutions.
-                        </p>
-                    </div>
+             <div class="bg-white p-6 rounded-lg shadow-xl transition duration-300 hover:shadow-2xl">
+                    <i class="fas fa-warehouse text-5xl text-primary mb-4"></i>
+                    <h3 class="text-2xl font-heading font-semibold mb-3">Bulk & Retail Orders</h3>
+                    <p class="text-gray-600">Whether for personal consumption or business supply, we cater to both large and small orders efficiently.</p>
                 </div>
+                
 
                 <!-- Feature 3 -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 group">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1632225780344-725e7477fd02?auto=format&fit=crop&w=800&q=80" alt="Customer-Centric Approach" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Customer-Centric</h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            We prioritize customer satisfaction by providing exceptional support and tailored solutions to meet the unique needs of every farmer.
-                        </p>
-                    </div>
+                   <div class="bg-white p-6 rounded-lg shadow-xl transition duration-300 hover:shadow-2xl">
+                    <i class="fas fa-hand-holding-usd text-5xl text-primary mb-4"></i>
+                    <h3 class="text-2xl font-heading font-semibold mb-3">Competitive Pricing</h3>
+                    <p class="text-gray-600">We offer the best value for money without compromising on the quality of essential goods.</p>
                 </div>
+
             </div>
         </div>
     </section>
 
     <!-- Products Section -->
-    <section id="products" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Explore Our Products</h2>
-            <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-16">
-                Discover a wide range of sustainable agrochemical solutions designed for all your farming needs.
+    <section id="products" class="py-20 bg-offwhite">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl font-bold text-primary section-title">Explore Our Product Range</h2>
+                <h4 class="text-xl text-gray-500 mt-4">Discover a wide variety of essential commodities.</h4>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- === ROW 1 START === -->
+                
+                <!-- Product 1: Household Items -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1642764732251-9dacf60eb423?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Household Items" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">In Stock</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Household Items</h3>
+                  
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">From cleaning supplies to kitchen essentials, our household items are designed to make everyday living easier.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 1 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Household Essentials</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-broom text-accent mr-2"></i>Cleaning Agents & Detergents</li>
+                            <li class="flex items-center"><i class="fas fa-utensils text-accent mr-2"></i>Kitchen Utensils & Storage</li>
+                            <li class="flex items-center"><i class="fas fa-soap text-accent mr-2"></i>Sanitary & Paper Products</li>
+                            <li class="flex items-center"><i class="fas fa-spray-can text-accent mr-2"></i>Home Fragrances & Air Fresheners</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product 2: Food & Beverages -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1557543506-2656f0961c10?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Food & Beverages" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Best Seller</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Food and Beverages</h3>
+                   
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">We offer a diverse selection of food and beverage products that cater to the tastes and preferences of our customers.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 2 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Groceries & Refreshments</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                           <li class="flex items-center"><i class="fas fa-wheat-awn text-accent mr-2"></i>Grains, Flours, and Cereals</li>
+                            <li class="flex items-center"><i class="fas fa-cookie-bite text-accent mr-2"></i>Packaged Snacks & Confectionery</li>
+                            <li class="flex items-center"><i class="fas fa-mug-hot text-accent mr-2"></i>Non-alcoholic Drinks</li>
+                            <li class="flex items-center"><i class="fas fa-box text-accent mr-2"></i>Canned & Preserved Foods</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product 3: Personal Care (THIRD COLUMN - TOOLTIP LEFT) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group tooltip-left">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1610161030119-22452b016153?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Personal Care" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">New</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Personal Care</h3>
+                        
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">Our personal care products ensure that everyone has access to quality hygiene and beauty essentials.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 3 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Health & Hygiene</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-pump-soap text-accent mr-2"></i>Soap, Shampoo & Conditioners</li>
+                            <li class="flex items-center"><i class="fas fa-tooth text-accent mr-2"></i>Toothpaste & Oral Care</li>
+                            <li class="flex items-center"><i class="fas fa-sun text-accent mr-2"></i>Body Lotions & Skincare</li>
+                            <li class="flex items-center"><i class="fas fa-baby text-accent mr-2"></i>Essential Baby Care Items</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- === ROW 1 END === -->
+                
+                <!-- === ROW 2 START (Duplicated - Edit This) === -->
+                
+                <!-- Product 4: Household Items (Dupe) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1664004924947-2a2b6fbefb8b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNsZWFuaW5nJTIwc3VwcGxpZXN8ZW58MHx8MHx8fDA%3D" alt="Household Items" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">In Stock</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Cleaning Supplies </h3>
+                
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">A new category for deep cleaning and maintenance supplies. Ready for your custom details.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 4 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Cleaning & Maintenance</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-brush text-accent mr-2"></i>Heavy Duty Cleaners</li>
+                            <li class="flex items-center"><i class="fas fa-broom text-accent mr-2"></i>Floor and Surface Care</li>
+                            <li class="flex items-center"><i class="fas fa-spray-can text-accent mr-2"></i>Disinfectants</li>
+                            <li class="flex items-center"><i class="fas fa-rag text-accent mr-2"></i>Tools and Cloths</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product 5: Food & Beverages (Dupe) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1614735241165-6756e1df61ab?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Food & Beverages" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Value Pack</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Snacks and Treats </h3>
+                       
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">A placeholder for all your confectionery and quick snack inventory needs. Update the details here.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 5 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Confectionery Details</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-cookie-bite text-accent mr-2"></i>Biscuits & Cookies</li>
+                            <li class="flex items-center"><i class="fas fa-candy-cane text-accent mr-2"></i>Chocolates & Candies</li>
+                            <li class="flex items-center"><i class="fas fa-popcorn text-accent mr-2"></i>Salty Snacks & Crisps</li>
+                            <li class="flex items-center"><i class="fas fa-box text-accent mr-2"></i>Bulk Variety Packs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product 6: Personal Care (Dupe - THIRD COLUMN - TOOLTIP LEFT) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group tooltip-left">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1610161030119-22452b016153?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Personal Care" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">On Sale</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Baby Products </h3>
+                        
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">Essential items tailored for baby care, including diapers, wipes, and sensitive skin formulas.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 6 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Infant Care Range</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-baby text-accent mr-2"></i>Diapers (Various Sizes)</li>
+                            <li class="flex items-center"><i class="fas fa-pump-soap text-accent mr-2"></i>Sensitive Wipes</li>
+                            <li class="flex items-center"><i class="fas fa-lotion-bottle text-accent mr-2"></i>Baby Lotions & Oils</li>
+                            <li class="flex items-center"><i class="fas fa-bath text-accent mr-2"></i>Shampoo & Wash</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- === ROW 2 END === -->
+                
+                <!-- === ROW 3 START (Duplicated - Edit This) === -->
+
+                <!-- Product 7: Household Items (Dupe) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1738484708927-c1f45df0b56e?q=80&w=1167&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Household Items" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">In Stock</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Kitchen Supplies </h3>
+                        
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">Items essential for cooking, food preparation, and storage in the kitchen. Ready for your edits.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 7 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Cooking & Storage</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-utensils text-accent mr-2"></i>Aluminum Foil & Wrap</li>
+                            <li class="flex items-center"><i class="fas fa-trash text-accent mr-2"></i>Garbage Bags</li>
+                            <li class="flex items-center"><i class="fas fa-boxes text-accent mr-2"></i>Storage Containers</li>
+                            <li class="flex items-center"><i class="fas fa-sponge text-accent mr-2"></i>Dish Cloths & Sponges</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product 8: Food & Beverages (Dupe) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1567948928621-836c2fcf6165?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Food & Beverages" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Best Seller</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Cold Beverages</h3>
+                       
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">Your inventory space for cold drinks, juices, and water. Update the relevant details and prices.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 8 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Cold Drinks & Juices</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-bottle-water text-accent mr-2"></i>Mineral Water</li>
+                            <li class="flex items-center"><i class="fas fa-wine-glass text-accent mr-2"></i>Fruit Juices</li>
+                            <li class="flex items-center"><i class="fas fa-soda-bottle text-accent mr-2"></i>Carbonated Drinks</li>
+                            <li class="flex items-center"><i class="fas fa-mug-hot text-accent mr-2"></i>Energy Drinks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product 9: Personal Care (Dupe - THIRD COLUMN - TOOLTIP LEFT) -->
+                <div class="product-card bg-white rounded-lg overflow-visible shadow-lg border border-gray-100 flex flex-col relative group tooltip-left">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1695972235610-0c68661d537c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGJlYXV0eSUyMHByb2R1Y3R8ZW58MHx8MHx8fDA%3D" alt="Personal Care" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase">New</div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="font-heading text-xl font-bold text-gray-800 mb-2">Beauty & Cosmetics </h3>
+                        
+                        <p class="text-gray-600 text-sm mb-6 flex-grow">Essential beauty and cosmetic items for daily use and personal care. Edit these details now.</p>
+                    </div>
+                    <!-- Pop-Out Content Box 9 -->
+                    <div class="product-hover-tooltip">
+                        <h4 class="font-heading font-semibold text-primary mb-3 uppercase tracking-wider text-sm border-b pb-2 border-gray-100">Beauty Essentials</h4>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-heart text-accent mr-2"></i>Lip Balms & Tints</li>
+                            <li class="flex items-center"><i class="fas fa-cream text-accent mr-2"></i>Hand & Face Creams</li>
+                            <li class="flex items-center"><i class="fas fa-mask text-accent mr-2"></i>Facial Masks</li>
+                            <li class="flex items-center"><i class="fas fa-mirror text-accent mr-2"></i>Hair Accessories</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- === ROW 3 END === -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Sections (Mission/Vision/Values) -->
+    <section id="about" class="bg-white">
+        <!-- Mission -->
+        <div class="flex flex-col md:flex-row h-auto md:h-[500px]">
+            <div class="md:w-1/2 relative h-64 md:h-full">
+                <img src="https://images.unsplash.com/photo-1497548637115-d2bc86a3c716?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover" alt="Mission">
+            </div>
+            <div class="md:w-1/2 p-12 lg:p-24 flex flex-col justify-center bg-gray-50">
+                <h2 class="font-heading text-3xl font-bold text-primary mb-4 section-title ml-0">Our Mission</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mt-4">
+                    To provide reliable distribution services that connect local markets with essential commodities, promoting sustainability and growth.
+                </p>
+            </div>
+        </div>
+
+        <!-- Vision -->
+        <div class="flex flex-col md:flex-row-reverse h-auto md:h-[500px]">
+            <div class="md:w-1/2 relative h-64 md:h-full">
+                <img src="https://images.unsplash.com/photo-1584789899980-14c1c2855de1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover" alt="Vision">
+            </div>
+            <div class="md:w-1/2 p-12 lg:p-24 flex flex-col justify-center bg-white">
+                <h2 class="font-heading text-3xl font-bold text-primary mb-4 section-title ml-0">Our Vision</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mt-4">
+                    To be the leading FMCG distributor in Kenya, recognized for our commitment to quality and customer satisfaction.
+                </p>
+            </div>
+        </div>
+
+        <!-- Values -->
+        <div class="flex flex-col md:flex-row h-auto md:h-[500px]">
+            <div class="md:w-1/2 relative h-64 md:h-full">
+                <img src="https://images.unsplash.com/photo-1601855751393-fd676d45d239?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover" alt="Values">
+            </div>
+            <div class="md:w-1/2 p-12 lg:p-24 flex flex-col justify-center bg-gray-50">
+                <h2 class="font-heading text-3xl font-bold text-primary mb-4 section-title ml-0">Our Values</h2>
+                <p class="text-gray-600 text-lg leading-relaxed mt-4">
+                    Integrity, community, and excellence are the core values that drive our operations and guide our interactions with clients.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-primary text-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-3xl font-bold mb-4">What Our Customers Say</h2>
+                <p class="opacity-80">Feedback from our clients is a testament to our dedication and quality.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-white bg-opacity-10 p-8 rounded-lg backdrop-blur-sm border border-white border-opacity-10">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1517642528016-265378cbcc0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client" class="w-12 h-12 rounded-full object-cover mr-4 border-2 border-accent">
+                        <div>
+                            <h4 class="font-bold font-heading">Reliable Service</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm leading-relaxed italic opacity-90">
+                        "House of Essential Commodities has been a game changer for our shop. Their delivery is always on time and the products are of excellent quality."
+                    </p>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-white bg-opacity-10 p-8 rounded-lg backdrop-blur-sm border border-white border-opacity-10">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1644183921950-994e367147af?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client" class="w-12 h-12 rounded-full object-cover mr-4 border-2 border-accent">
+                        <div>
+                            <h4 class="font-bold font-heading">Quality Products</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm leading-relaxed italic opacity-90">
+                        "I trust House of Essential Commodities for all my supplies. The range of products they offer is impressive and always fresh!"
+                    </p>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-white bg-opacity-10 p-8 rounded-lg backdrop-blur-sm border border-white border-opacity-10">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1573325226260-763ab986c214?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="Client" class="w-12 h-12 rounded-full object-cover mr-4 border-2 border-accent">
+                        <div>
+                            <h4 class="font-bold font-heading">Community Support</h4>
+                            <div class="text-yellow-400 text-xs">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm leading-relaxed italic opacity-90">
+                        "As a small retailer, I appreciate how House of Essential Commodities supports local businesses. Their service is exceptional."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Commitment Section -->
+    <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-heading text-3xl font-bold mb-6">Dedicated Last Mile Delivery</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-10 text-lg">
+                We are committed to ensuring that our deliveries reach every corner of the community, providing a seamless experience for our retail partners.
             </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Product 1 -->
-                <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition">
-                    <div class="aspect-square bg-gray-100 mb-6 rounded overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1588433431915-66f1b3dcabf5?auto=format&fit=crop&w=600&q=80" alt="Biopesticides" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Biopesticides</h3>
-                    <p class="text-primary font-bold text-xl mb-4">$30.00</p>
-                    <button class="w-full py-2 border-2 border-primary text-primary font-bold rounded hover:bg-primary hover:text-white transition uppercase text-sm">
-                        Buy Now
-                    </button>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition">
-                    <div class="aspect-square bg-gray-100 mb-6 rounded overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1590682680695-43b964a3ae17?auto=format&fit=crop&w=600&q=80" alt="Soil Enhancers" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Soil Enhancers</h3>
-                    <p class="text-primary font-bold text-xl mb-4">$25.00</p>
-                    <button class="w-full py-2 border-2 border-primary text-primary font-bold rounded hover:bg-primary hover:text-white transition uppercase text-sm">
-                        Buy Now
-                    </button>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition">
-                    <div class="aspect-square bg-gray-100 mb-6 rounded overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1638429611224-84a71b809b96?auto=format&fit=crop&w=600&q=80" alt="Organic Fertilizer" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Organic Fertilizer</h3>
-                    <p class="text-primary font-bold text-xl mb-4">$45.00</p>
-                    <button class="w-full py-2 border-2 border-primary text-primary font-bold rounded hover:bg-primary hover:text-white transition uppercase text-sm">
-                        Buy Now
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Us Section -->
-    <section id="about" class="py-20 bg-light">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Natugrow?</h2>
-                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-lg text-gray-600">Experience the difference with our dedicated services and superior products.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <!-- Why Item 1 -->
-                <div class="flex flex-col items-center text-center relative z-0 hover:z-10 transition-all">
-                    <img src="https://images.unsplash.com/photo-1662355543219-b66790d5b167?auto=format&fit=crop&w=600&q=80" alt="Expertise" class="w-full h-64 object-cover rounded-lg shadow-md mb-6">
-                    <h3 class="text-xl font-bold mb-3">Expertise in Agrochemicals</h3>
-                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">Our team comprises industry experts who are committed to research and innovation in agrochemical formulations.</p>
-                    
-                    <!-- Button with Hover Pop-out -->
-                    <div class="relative group inline-block">
-                        <!-- Added class 'popover-trigger' for JS click handling -->
-                        <a href="#" class="text-primary font-semibold hover:text-secondary uppercase text-sm tracking-wide inline-flex items-center py-2 popover-trigger">
-                            Discover More <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
-                        
-                        <!-- Pop-out Content -->
-                        <div class="popover-content absolute bottom-full left-1/2 mb-2 w-64 bg-white p-5 rounded-lg shadow-2xl border border-gray-100 z-50 text-left">
-                            <h4 class="font-bold text-gray-800 mb-2 text-sm border-b pb-2 border-gray-100">Research Excellence</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">
-                                Our research facility employs over 50 scientists dedicated to creating formulations that maximize yield while minimizing chemical runoff. We partner with leading agricultural universities to ensure top-tier quality.
-                            </p>
-                            <!-- Arrow pointer for the tooltip -->
-                            <div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-[1px]">
-                                <div class="border-solid border-t-white border-t-8 border-x-transparent border-x-8 border-b-0"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Why Item 2 -->
-                <div class="flex flex-col items-center text-center relative z-0 hover:z-10 transition-all">
-                    <img src="https://images.unsplash.com/photo-1662355534822-0eeecfee4791?auto=format&fit=crop&w=600&q=80" alt="Sustainable" class="w-full h-64 object-cover rounded-lg shadow-md mb-6">
-                    <h3 class="text-xl font-bold mb-3">Sustainable Practices</h3>
-                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">We adhere to environmentally friendly practices throughout our production process, ensuring minimal impact on the ecosystem.</p>
-                    
-                    <!-- Button with Hover Pop-out -->
-                    <div class="relative group inline-block">
-                        <!-- Added class 'popover-trigger' for JS click handling -->
-                        <a href="#" class="text-primary font-semibold hover:text-secondary uppercase text-sm tracking-wide inline-flex items-center py-2 popover-trigger">
-                            Learn How <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
-                        
-                        <!-- Pop-out Content -->
-                        <div class="popover-content absolute bottom-full left-1/2 mb-2 w-64 bg-white p-5 rounded-lg shadow-2xl border border-gray-100 z-50 text-left">
-                            <h4 class="font-bold text-gray-800 mb-2 text-sm border-b pb-2 border-gray-100">Eco-First Production</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">
-                                We utilize a closed-loop water system and solar energy in our factories. Our packaging is 100% biodegradable, significantly reducing plastic waste in farming communities across the region.
-                            </p>
-                             <!-- Arrow pointer -->
-                             <div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-[1px]">
-                                <div class="border-solid border-t-white border-t-8 border-x-transparent border-x-8 border-b-0"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Why Item 3 -->
-                <div class="flex flex-col items-center text-center relative z-0 hover:z-10 transition-all">
-                    <img src="https://images.unsplash.com/photo-1661783936151-9f0b1800ef3d?auto=format&fit=crop&w=600&q=80" alt="Community" class="w-full h-64 object-cover rounded-lg shadow-md mb-6">
-                    <h3 class="text-xl font-bold mb-3">Community Engagement</h3>
-                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">We actively engage with local farming communities to understand their needs and challenges, allowing us to provide better solutions.</p>
-                    
-                    <!-- Button with Hover Pop-out -->
-                    <div class="relative group inline-block">
-                        <!-- Added class 'popover-trigger' for JS click handling -->
-                        <a href="#" class="text-primary font-semibold hover:text-secondary uppercase text-sm tracking-wide inline-flex items-center py-2 popover-trigger">
-                            Get Involved <i class="fas fa-arrow-right ml-1"></i>
-                        </a>
-                        
-                        <!-- Pop-out Content -->
-                        <div class="popover-content absolute bottom-full left-1/2 mb-2 w-64 bg-white p-5 rounded-lg shadow-2xl border border-gray-100 z-50 text-left">
-                            <h4 class="font-bold text-gray-800 mb-2 text-sm border-b pb-2 border-gray-100">Local Impact</h4>
-                            <p class="text-xs text-gray-600 leading-relaxed">
-                                We host monthly workshops, sponsor local school garden projects, and provide free soil testing services. Our "Farmer First" program offers scholarships to children of partner farmers.
-                            </p>
-                             <!-- Arrow pointer -->
-                             <div class="absolute top-full left-1/2 transform -translate-x-1/2 -mt-[1px]">
-                                <div class="border-solid border-t-white border-t-8 border-x-transparent border-x-8 border-b-0"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- News / Blog Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Latest Insights and Updates</h2>
-                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
-                <p class="text-lg text-gray-600">Stay informed with our latest news articles and developments in the agrochemical sector.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- News 1 -->
-                <div class="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:shadow-md transition relative group overflow-hidden h-full">
-                    <div>
-                        <div class="text-sm text-gray-400 mb-2">December 2, 2025</div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-primary cursor-pointer">New Product Launch: Biopesticides</h3>
-                        <p class="text-gray-600 text-sm mb-4">We are excited to announce the launch of our new line of biopesticides, designed to provide...</p>
-                        <a href="#" class="text-primary font-bold text-sm uppercase">Read More</a>
-                    </div>
-
-                    <!-- Pop-out Content -->
-                    <div class="absolute inset-0 bg-white bg-opacity-95 p-8 flex flex-col justify-center items-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none group-hover:pointer-events-auto cursor-pointer">
-                        <h4 class="font-bold text-primary mb-3 text-lg">Biopesticides Deep Dive</h4>
-                        <p class="text-sm text-gray-700 leading-relaxed">
-                            Our new Biopesticides line uses natural microbes and botanical extracts to target pests effectively without harming beneficial insects. This launch represents a major step towards 100% organic farming solutions.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- News 2 -->
-                <div class="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:shadow-md transition relative group overflow-hidden h-full">
-                    <div>
-                        <div class="text-sm text-gray-400 mb-2">December 2, 2025</div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-primary cursor-pointer">Tips for Sustainable Agriculture</h3>
-                        <p class="text-gray-600 text-sm mb-4">In this blog post, we share practical tips for farmers looking to adopt more sustainable...</p>
-                        <a href="#" class="text-primary font-bold text-sm uppercase">Read More</a>
-                    </div>
-
-                    <!-- Pop-out Content -->
-                    <div class="absolute inset-0 bg-white bg-opacity-95 p-8 flex flex-col justify-center items-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none group-hover:pointer-events-auto cursor-pointer">
-                        <h4 class="font-bold text-primary mb-3 text-lg">Sustainable Practices Summary</h4>
-                        <p class="text-sm text-gray-700 leading-relaxed">
-                            Learn practical steps for reducing water consumption, optimizing fertilizer usage, and implementing crop rotation. Adopting these tips can drastically improve farm productivity and soil health.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- News 3 -->
-                <div class="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:shadow-md transition relative group overflow-hidden h-full">
-                    <div>
-                        <div class="text-sm text-gray-400 mb-2">December 2, 2025</div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-800 hover:text-primary cursor-pointer">The Future of Sustainable Farming</h3>
-                        <p class="text-gray-600 text-sm mb-4">As the demand for sustainable farming practices grows, we explore the advancements in...</p>
-                        <a href="#" class="text-primary font-bold text-sm uppercase">Read More</a>
-                    </div>
-
-                    <!-- Pop-out Content -->
-                    <div class="absolute inset-0 bg-white bg-opacity-95 p-8 flex flex-col justify-center items-center text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none group-hover:pointer-events-auto cursor-pointer">
-                        <h4 class="font-bold text-primary mb-3 text-lg">Future Trends</h4>
-                        <p class="text-sm text-gray-700 leading-relaxed">
-                            We discuss upcoming trends, including AI-driven precision agriculture, vertical farming solutions, and the critical role of biotech in feeding a growing global population sustainably.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer (Contact Us) Section -->
-    <footer id="contact" class="bg-dark text-white pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Grid adjusted to md:grid-cols-3 -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 border-b border-gray-700 pb-10 mb-8">
-                <!-- Company Info -->
-                <div class="space-y-4">
-                    <h4 class="text-xl font-bold text-primary">Natugrow Biosciences</h4>
-                    <p class="text-sm text-gray-400">Pioneering sustainable agrochemical solutions in East Africa. Committed to farmer success and environmental stewardship.</p>
-                    <div class="flex space-x-4 text-lg">
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div>
-                    <h4 class="text-lg font-bold mb-5">Quick Links</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#products" class="text-gray-400 hover:text-white transition">Our Products</a></li>
-                        <li><a href="#services" class="text-gray-400 hover:text-white transition">Farm Services</a></li>
-                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Careers</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact Info -->
-                <div>
-                    <h4 class="text-lg font-bold mb-5">Contact Us</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt text-primary mt-1 mr-3"></i>
-                            <span class="text-gray-400">Loresho Ridge, Nairobi, Kenya</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-envelope text-primary mt-1 mr-3"></i>
-                            <span class="text-gray-400">info@natugrow.co.ke</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-phone-alt text-primary mt-1 mr-3"></i>
-                            <span class="text-gray-400">+254 712 345 678</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Newsletter section removed -->
-            </div>
-
-            <!-- Copyright -->
-            <div class="text-center text-sm text-gray-500">
-                &copy; 2025 Natugrow Biosciences. All rights reserved.
+          
+          <div class="flex flex-col items-center justify-center mx-auto mb-8">
+            <p class="text-gray-500 text-sm mb-8">
+                &copy; 2025 House of Essential Commodities.
+            </p>
+            <div class="flex space-x-6 justify-center">
+                <a href="" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-tiktok text-xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in text-xl"></i></a>
             </div>
         </div>
     </footer>
 
+    <!-- WhatsApp Talk To Us Floating Button -->
+    <a href="https://wa.me/254707901947" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" title="Ch</g>at on WhatsApp" class="fixed bottom-6 right-6 z-50 flex items-center justify-center bg-[#25D366] hover:bg-[#20ba5a] text-white p-3 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1">
+        <i class="fab fa-whatsapp text-2xl"></i>
+        <!-- Pulse effect for attention -->
+        <span class="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+        </span>
+    </a>
+
+    <!-- Scripts -->
     <script>
-        let correctCaptcha = 0;
-
-        /**
-         * Generates a new simple addition CAPTCHA problem and updates the UI.
-         */
-        function generateCaptcha() {
-            // Generate two random numbers between 1 and 10
-            const num1 = Math.floor(Math.random() * 9) + 2; // Start at 2 to avoid trivial 1+1
-            const num2 = Math.floor(Math.random() * 9) + 2;
-            correctCaptcha = num1 + num2;
-
-            // Update the question label and clear the input field
-            document.getElementById('captcha-question').textContent = `What is ${num1} + ${num2}?`;
-            document.getElementById('captcha-input').value = ''; 
+        // Form Handling Logic for Mailto
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const name = form.querySelector('input[name="name"]').value;
+            const email = form.querySelector('input[name="email"]').value;
+            const comment = form.querySelector('textarea[name="comment"]').value;
+            
+            const subject = "Inquiry from Website: " + name;
+            const body = "Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + comment;
+            
+            // Construct and trigger mailto link
+            window.location.href = "mailto:sales@houseofessentialcommodities.co.ke?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
         }
 
-        /**
-         * Handles the form submission. If CAPTCHA is correct, it submits the form 
-         * which sends data to the Formspree action URL.
-         * @param {Event} event - The form submission event.
-         */
-        function handleInquirySubmit(event) {
-            event.preventDefault(); // Prevent default submission initially
-
-            const captchaInput = document.getElementById('captcha-input');
-            const errorElement = document.getElementById('captcha-error');
-            const form = document.getElementById('inquiry-form');
-            const submitButton = document.getElementById('submit-button');
-            
-            const userAnswer = parseInt(captchaInput.value, 10);
-            
-            errorElement.classList.add('hidden'); // Hide any previous error
-
-            if (userAnswer === correctCaptcha) {
-                // CAPTCHA is correct - proceed to submit the form to Formspree
-                
-                // Show loading state (since Formspree will take over navigation)
-                submitButton.textContent = "Sending...";
-                submitButton.disabled = true;
-                
-                // Programmatically submit the form, sending data to the 'action' URL
-                form.submit();
-
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        const logoText = document.querySelector('.logo-text');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+                navbar.classList.remove('text-white');
+                navbar.classList.add('text-gray-800');
             } else {
-                // CAPTCHA is incorrect - show error message and regenerate problem
-                errorElement.textContent = "Incorrect CAPTCHA. Please try again.";
-                errorElement.classList.remove('hidden');
-                generateCaptcha(); 
-                captchaInput.focus();
+                navbar.classList.remove('scrolled');
+                navbar.classList.add('text-white');
+                navbar.classList.remove('text-gray-800');
             }
-        }
-
-        /**
-         * Sets up touch-friendly click handlers for the popovers in the "Why Us" section.
-         */
-        function setupPopovers() {
-            const popoverTriggers = document.querySelectorAll('.popover-trigger');
-            
-            popoverTriggers.forEach(trigger => {
-                trigger.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent navigating to #
-                    event.stopPropagation(); // Stop propagation to body listener
-
-                    const parentGroup = this.closest('.group');
-                    const isActive = parentGroup.classList.contains('popover-open');
-
-                    // 1. Close all other popovers
-                    document.querySelectorAll('.popover-open').forEach(openPopover => {
-                        if (openPopover !== parentGroup) {
-                            openPopover.classList.remove('popover-open');
-                        }
-                    });
-
-                    // 2. Toggle the current popover
-                    if (isActive) {
-                        parentGroup.classList.remove('popover-open');
-                    } else {
-                        parentGroup.classList.add('popover-open');
-                    }
-                });
-            });
-
-            // 3. Close popovers when clicking/tapping anywhere else on the document body
-            document.body.addEventListener('click', function(event) {
-                // Check if the click target is outside of any popover trigger group
-                if (!event.target.closest('.group')) {
-                     document.querySelectorAll('.popover-open').forEach(openPopover => {
-                        openPopover.classList.remove('popover-open');
-                    });
-                }
-            });
-        }
-
-
-        // Initialize CAPTCHA, mobile menu, and popovers when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            generateCaptcha();
-            setupPopovers(); // Initialize the popover click handlers
-
-            // JavaScript for mobile menu toggle
-            document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-                const menu = document.getElementById('mobile-menu');
-                menu.classList.toggle('active');
-            });
-
-            // Close menu when a link is clicked
-            document.querySelectorAll('#mobile-menu a').forEach(item => {
-                item.addEventListener('click', () => {
-                    document.getElementById('mobile-menu').classList.remove('active');
-                });
-            });
         });
 
-        // Reset forms on page unload/back navigation
-        window.onbeforeunload = () => {
-            for(const form of document.getElementsByTagName('form')) {
-                form.reset();
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+            // Toggle icon color if needed based on bg
+            if(window.scrollY <= 50) {
+               // handle icon visibility on dark bg
             }
-        }
+        });
+
+        // Close mobile menu on link click
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+        });
     </script>
 </body>
+
 </html>
+
+
